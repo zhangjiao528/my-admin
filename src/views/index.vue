@@ -6,8 +6,12 @@
     </div>
     <!-- 右侧 -->
     <div class="g-main">
-      <div class="g-top">头部</div>
-      <div class="g-main-box">主体内容</div>
+      <div class="g-top">
+        <navbar></navbar>
+      </div>
+      <div class="g-main-box">
+        <app-main></app-main>
+      </div>
     </div>
   </div>
 </template>
@@ -15,10 +19,15 @@
 
 <script>
 import Sidebar from '@/components/content/layout/Sidebar.vue'
+import AppMain from '@/components/content/layout/AppMain.vue'
+import Navbar from '@/components/content/layout/Navbar.vue'
+
 export default {
   name: 'Index',
   components: {
-    Sidebar
+    Sidebar,
+    AppMain,
+    Navbar
   }
 }
 </script>

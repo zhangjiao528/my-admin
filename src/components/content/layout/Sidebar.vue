@@ -1,17 +1,51 @@
 <template>
   <el-menu
-      default-active="1"
+      :default-active="$route.path"
       class="el-menu-vertical-demo"
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b">
-      <el-menu-item index="1">
-        <i class="el-icon-menu"></i>
-        <span slot="title">首页</span>
-      </el-menu-item>
-      <el-menu-item index="2" disabled>
-        <i class="el-icon-document"></i>
-        <span slot="title">客户管理</span>
-      </el-menu-item>
+      <router-link :to="item.path" v-for="item in routes" :key="item.id">
+        <el-menu-item :index="item.path">
+          <i :class="item.icon"></i>
+          <span slot="title">{{ item.name }}</span>
+        </el-menu-item>
+      </router-link>
     </el-menu>
 </template>
+
+<script>
+export default {
+  name: 'Sidebar',
+  data() {
+    return {
+      routes: [
+        {
+          id: 1,
+          name: '首页',
+          path: '/dashboard',
+          icon: 'el-icon-menu'
+        },
+        {
+          id: 2,
+          name: '客户管理',
+          path: '/customerManage',
+          icon: 'el-icon-document'
+        },
+        {
+          id: 3,
+          name: '位置管理',
+          path: '/location',
+          icon: 'el-icon-document'
+        },
+        {
+          id: 4,
+          name: '表单管理',
+          path: '/formManage',
+          icon: 'el-icon-document'
+        }
+      ]
+    }
+  }
+}
+</script>
