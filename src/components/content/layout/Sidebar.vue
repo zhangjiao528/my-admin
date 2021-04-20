@@ -6,7 +6,7 @@
       text-color="#fff"
       active-text-color="#ffd04b">
       <router-link :to="item.path" v-for="item in routes" :key="item.id">
-        <el-menu-item :index="item.path">
+        <el-menu-item :index="item.path" @click="menuClick(item)">
           <i :class="item.icon"></i>
           <span slot="title">{{ item.name }}</span>
         </el-menu-item>
@@ -45,6 +45,11 @@ export default {
           icon: 'el-icon-document'
         }
       ]
+    }
+  },
+  methods: {
+    menuClick(data) {
+      console.log(data)
     }
   }
 }
