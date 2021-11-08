@@ -43,6 +43,18 @@ export default {
           name: '表单管理',
           path: '/formManage',
           icon: 'el-icon-document'
+        },
+        {
+          id: 5,
+          name: '表格管理',
+          path: '/tableManage',
+          icon: 'el-icon-document'
+        },
+        {
+          id: 6,
+          name: '自定义组件model',
+          path: '/customComponent',
+          icon: 'el-icon-document'
         }
       ]
     }

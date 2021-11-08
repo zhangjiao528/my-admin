@@ -31,6 +31,16 @@ const routes = [
         path: 'formManage',
         name: '表单管理',
         component: () => import('../views/formManage')
+      },
+      {
+        path: 'tableManage',
+        name: '表格管理',
+        component: () => import('../views/tableManage')
+      },
+      {
+        path: 'customComponent',
+        name: '自定义组件model',
+        component: () => import('../views/customComponent')
       }
     ]
   }
