@@ -41,6 +41,16 @@ const routes = [
         path: 'customComponent',
         name: '自定义组件model',
         component: () => import('../views/customComponent')
+      },
+      {
+        path: 'tableTree',
+        name: '表格树',
+        component: () => import('../views/tableTree')
+      },
+      {
+        path: 'fileUpload',
+        name: '大文件上传',
+        component: () => import('../views/fileUpload')
       }
     ]
   }

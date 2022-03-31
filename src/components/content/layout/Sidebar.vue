@@ -55,6 +55,18 @@ export default {
           name: '自定义组件model',
           path: '/customComponent',
           icon: 'el-icon-document'
+        },
+        {
+          id: 7,
+          name: '表格树',
+          path: '/tableTree',
+          icon: 'el-icon-document'
+        },
+        {
+          id: 8,
+          name: '大文件上传',
+          path: '/fileUpload',
+          icon: 'el-icon-document'
         }
       ]
     }
