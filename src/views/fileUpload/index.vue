@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import SparkMD5 from 'spark-md5';
 export default {
   name: 'FileUpload',
@@ -35,7 +36,7 @@ export default {
           if(isTest) {
              return "http://test.imydao.cn:13001/sso/fileserver/MinIOFile/uploadChecking"
           }else{
-            return "/api/public/temp/" + file.uniqueIdentifier + '/' + chunk.offset
+            return ""
             // return "http://test.imydao.cn:13001/sso/fileserver/MinIOFile/uploadChunk"
           }
         },
@@ -131,10 +132,12 @@ export default {
         fileReader = new FileReader();
       let time = new Date().getTime();
       file.cmd5 = true;
+      let that = this
       fileReader.onload = (e) => {
-          spark.append(e.target.result);   // Append array buffer
+          spark.append(e.target.result);  // Append array buffer
+          file.partNumber = currentChunk
           currentChunk++;
-    
+
           if (currentChunk < chunks) {
               //console.log(`第${currentChunk}分片解析完成, 开始第${currentChunk +1} / ${chunks}分片解析`);
               let percent = Math.floor(currentChunk / chunks * 100);
@@ -147,9 +150,10 @@ export default {
               spark.destroy(); //释放缓存
               file.uniqueIdentifier = md5; //将文件md5赋值给文件唯一标识
               file.cmd5 = false; //取消计算md5状态
-              file.currentChunk = currentChunk
-              file.resume(); //开始上传
+
           }
+          that.uploadFile(file, currentChunk, fileReader)
+
       };
       fileReader.onerror = () => {
           console.warn('oops, something went wrong.');
@@ -162,8 +166,22 @@ export default {
     
           fileReader.readAsArrayBuffer(blobSlice.call(file.file, start, end));
       };
-    
+
       loadNext();
+    },
+    // 切片上传方法
+    uploadFile(file, currentChunk, fileReader) {
+      console.log('切片上传', file, currentChunk, fileReader)
+      axios.put(`/api/public/temp/${file.uniqueIdentifier}/${currentChunk - 1}`, fileReader.result, {
+        headers: {
+          'Content-Type': 'application/octet-stream'
+        }
+      }).then(res => {
+        if(res.status == 200) {
+          file.resume(); //开始上传
+
+        }
+      })
     },
     // 文件上传进度的回调
     onFileProgress(rootFile, file, chunk) {
