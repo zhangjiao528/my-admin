@@ -20,12 +20,14 @@
         <uploader-list></uploader-list>
       </uploader>
     </div>
+    
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import SparkMD5 from 'spark-md5';
+import hex_md5 from 'js-md5';
 export default {
   name: 'FileUpload',
   data() {
@@ -36,30 +38,36 @@ export default {
           if(isTest) {
              return "http://test.imydao.cn:13001/sso/fileserver/MinIOFile/uploadChecking"
           }else{
-            return ""
+            return `/api/public/temp/${file.uniqueIdentifier}/${chunk.offset}`
             // return "http://test.imydao.cn:13001/sso/fileserver/MinIOFile/uploadChunk"
           }
         },
+        method: 'octet',
         testMethod: 'POST', // 设置校验文件是否上传过的请求方法
         uploadMethod: 'PUT', // 设置分片上传文件的请求方法
         // 上传需要的其他额外参数
-        query: (file) => {
+        query: (file, chunk, isTest) => {
           console.log('query', file)
           return {
             "keys": file.uniqueIdentifier,
-            "partNumber": file.chunkNumber
-
+            "partNumber": file.chunkNumber,
+            "file": file.file
           }
         },
         // 修改或者自定义参数
-        processParams(params) {
-          console.log('params', params)
-          return {
-            "keys": params.keys,
-            "partNumber": params.chunkNumber
+        processParams(params, file, chunk, isTest) {
+          console.log('params', params, file, chunk)
+          if(isTest) {
+            return {
+              "keys": params.keys,
+            }
+          }else{
+            return {
+              
+            }
           }
         },
-        chunkSize: 1024 * 1024 * 5,  // 分片大小：2MB
+        chunkSize: 1024 * 1024 * 5,  // 分片大小：5MB
         simultaneousUploads: 2, //并发上传数
         headers: (file, chunk, isTest) => {
           if(isTest) {
@@ -86,6 +94,7 @@ export default {
         // 服务器分片校验函数
         checkChunkUploadedByResponse: (chunk, message) => {
           let obj = JSON.parse(message);
+          chunk.type = obj.data.type
           // 格式化数据为: [0,1,3,4,5,6]
           let uploaded = obj.data.uploadNum.map(item => +item.substr(item.lastIndexOf("/") + 1))
           if (obj.data.type == 1) {
@@ -107,6 +116,7 @@ export default {
         console.log('上传状态', status, response)
         return this.statusTextMap[status];
       },
+      fileIds: []
     }
   },
   created() {
@@ -132,12 +142,9 @@ export default {
         fileReader = new FileReader();
       let time = new Date().getTime();
       file.cmd5 = true;
-      let that = this
       fileReader.onload = (e) => {
           spark.append(e.target.result);  // Append array buffer
-          file.partNumber = currentChunk
           currentChunk++;
-
           if (currentChunk < chunks) {
               //console.log(`第${currentChunk}分片解析完成, 开始第${currentChunk +1} / ${chunks}分片解析`);
               let percent = Math.floor(currentChunk / chunks * 100);
@@ -150,10 +157,8 @@ export default {
               spark.destroy(); //释放缓存
               file.uniqueIdentifier = md5; //将文件md5赋值给文件唯一标识
               file.cmd5 = false; //取消计算md5状态
-
+              file.resume(); //开始上传
           }
-          that.uploadFile(file, currentChunk, fileReader)
-
       };
       fileReader.onerror = () => {
           console.warn('oops, something went wrong.');
@@ -169,28 +174,36 @@ export default {
 
       loadNext();
     },
-    // 切片上传方法
-    uploadFile(file, currentChunk, fileReader) {
-      console.log('切片上传', file, currentChunk, fileReader)
-      axios.put(`/api/public/temp/${file.uniqueIdentifier}/${currentChunk - 1}`, fileReader.result, {
-        headers: {
-          'Content-Type': 'application/octet-stream'
-        }
-      }).then(res => {
-        if(res.status == 200) {
-          file.resume(); //开始上传
-
-        }
-      })
-    },
     // 文件上传进度的回调
     onFileProgress(rootFile, file, chunk) {
-      console.log(rootFile)
+      console.log('上传进度', rootFile, file)
       console.log(`上传中 ${file.name}，chunk：${chunk.startByte / 1024 / 1024} ~ ${chunk.endByte / 1024 / 1024}`)
     },
     // 文件上传成功的回调
     onFileSuccess(rootFile, file, response, chunk) {
-      console.log(rootFile, file, response, chunk)
+      console.log('上传成功的分片信息', chunk)
+      if(chunk.type != 1) {
+        let that = this
+        axios.post('http://test.imydao.cn:13001/sso/fileserver/MinIOFile/chunk/complete', {
+            bucketName: "ssofiledev",
+            customerId: "0",
+            fileMd5: file.uniqueIdentifier,
+            fileName: file.name,
+            projectName: "test",
+            version: "V2"
+        }).then(function(res){
+          console.log('合并返回', res)
+            if (res.data.code == 200) {
+              that.fileIds.push(res.data.data.id)
+              console.log('fileIds', that.fileIds)
+            } else {
+                console.log(res.message);
+            }
+        })
+        .catch(function(error){
+            console.log(error);
+        });
+      }
     },
     // 文件上上传失败的回调
     onFileError(rootFile, file, response, chunk) {

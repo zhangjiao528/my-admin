@@ -10,10 +10,14 @@
         :value="item">
       </el-option>
     </el-select>
+    <div class="el-upload">
+      <input type="file" name="file" @change='selectFile' multiple="multiple"/>上传图片/文件
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -49,6 +53,23 @@ export default {
   methods: {
     optionChange(data) {
       console.log('绑定的值为对象',data)
+    },
+    selectFile(e) {
+      // 选择文件
+      for (let i = 0; i < e.target.files.length; i++) {
+        this.pushFile(e.target.files[i])
+      }
+    },
+    
+    pushFile(file) {
+      console.log('文件', file)
+      axios.put("/api/public/temp/md5/0", file, {
+        headers: {
+          'Content-Type': 'application/octet-stream'
+        }
+      }).then(res => {
+
+      })
     }
   }
 
