@@ -7,12 +7,15 @@ import uploader from 'vue-simple-uploader'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/style/index.less'
 
+import ViewUI from 'view-design';
+import 'view-design/dist/styles/iview.css';
+
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.use(uploader)
 
-
+Vue.use(ViewUI);
 
 
 new Vue({

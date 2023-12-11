@@ -51,6 +51,16 @@ const routes = [
         path: 'fileUpload',
         name: '大文件上传',
         component: () => import('../views/fileUpload')
+      },
+      {
+        path: 'videoUrl',
+        name: '获取视频第一帧',
+        component: () => import('../views/videoUrl')
+      },
+      {
+        path: 'componentRecursion',
+        name: '组件递归',
+        component: () => import('../views/componentRecursion')
       }
     ]
   }

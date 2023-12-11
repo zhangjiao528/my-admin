@@ -67,6 +67,18 @@ export default {
           name: '大文件上传',
           path: '/fileUpload',
           icon: 'el-icon-document'
+        },
+        {
+          id: 9,
+          name: '获取视频第一帧截图',
+          path: '/videoUrl',
+          icon: 'el-icon-document'
+        },
+        {
+          id: 10,
+          name: '组件递归',
+          path: '/componentRecursion',
+          icon: 'el-icon-document'
         }
       ]
     }
