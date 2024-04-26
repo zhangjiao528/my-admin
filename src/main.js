@@ -10,12 +10,16 @@ import '@/assets/style/index.less'
 import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
 
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.use(uploader)
 
 Vue.use(ViewUI);
+Vue.use(VXETable)
 
 
 new Vue({

@@ -61,6 +61,21 @@ const routes = [
         path: 'componentRecursion',
         name: '组件递归',
         component: () => import('../views/componentRecursion')
+      },
+      {
+        path: 'mergeCells',
+        name: '合并单元格',
+        component: () => import('../views/mergeCells')
+      },
+      {
+        path: 'leftTree',
+        name: '左侧树管理',
+        component: () => import('../views/leftTreeTable')
+      },
+      {
+        path: 'bimGis',
+        name: 'gis地图',
+        component: () => import('../views/bimGis')
       }
     ]
   }

@@ -15,12 +15,16 @@
     "js-md5": "^0.7.3",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
+    "ol": "^9.1.0",
     "spark-md5": "^3.0.2",
     "view-design": "^4.7.0",
     "vue": "^2.6.11",
     "vue-baidu-map": "^0.21.22",
     "vue-router": "^3.4.9",
-    "vue-simple-uploader": "^0.7.6"
+    "vue-simple-uploader": "^0.7.6",
+    "vue-virtual-scroll-list": "^2.3.5",
+    "vxe-table": "~3.4.11",
+    "xe-utils": "^3.5.14"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

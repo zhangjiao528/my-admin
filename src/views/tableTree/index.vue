@@ -2,7 +2,7 @@
   <div class="table-tree">
     <h3>iview下拉树带搜索</h3>
     <div class="input-tree">
-      <selectTree v-model="treeValue" clearable :treeData="treeData"></selectTree>
+      <selectTree v-model="treeValue" :treeData="treeData"></selectTree>
     </div>
   </div>
 </template>

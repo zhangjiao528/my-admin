@@ -1,0 +1,13 @@
+{
+  "name": "@form-design/bimmap",
+  "version": "1.1.2",
+  "description": "bimmap openlayer leaflet cesium",
+  "main": "bimmap.js",
+  "keywords": [
+    "openlayer",
+    "leaflet",
+    "cesium"
+  ],
+  "author": "yinjy",
+  "license": "ISC"
+}

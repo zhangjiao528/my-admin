@@ -79,6 +79,24 @@ export default {
           name: '组件递归',
           path: '/componentRecursion',
           icon: 'el-icon-document'
+        },
+        {
+          id: 11,
+          name: '合并单元格',
+          path: '/mergeCells',
+          icon: 'el-icon-document'
+        },
+        {
+          id: 12,
+          name: '左侧树管理',
+          path: '/leftTree',
+          icon: 'el-icon-document'
+        },
+        {
+          id: 13,
+          name: 'gis地图',
+          path: '/bimGis',
+          icon: 'el-icon-document'
         }
       ]
     }
